@@ -78,7 +78,7 @@ public class TrainNews {
 
         //DataSetIterators for training and testing respectively
         //Using AsyncDataSetIterator to do data loading in a separate thread; this may improve performance vs. waiting for data to load
-        wordVectors = WordVectorSerializer.loadTxtVectors(new File(WORD_VECTORS_PATH));
+        wordVectors = WordVectorSerializer.readWord2VecModel(new File(WORD_VECTORS_PATH));
 
         TokenizerFactory tokenizerFactory = new DefaultTokenizerFactory();
         tokenizerFactory.setTokenPreProcessor(new CommonPreprocessor());
@@ -135,20 +135,7 @@ public class TrainNews {
             System.out.println("Epoch " + i + " complete. Starting evaluation:");
 
             //Run evaluation. This is on 25k reviews, so can take some time
-            Evaluation evaluation = new Evaluation();
-            while (iTest.hasNext()) {
-                DataSet t = iTest.next();
-                INDArray features = t.getFeatures();
-                INDArray lables = t.getLabels();
-                //System.out.println("labels : " + lables);
-                INDArray inMask = t.getFeaturesMaskArray();
-                INDArray outMask = t.getLabelsMaskArray();
-                INDArray predicted = net.output(features, false);
-
-                //System.out.println("predicted : " + predicted);
-                evaluation.evalTimeSeries(lables, predicted, outMask);
-            }
-            iTest.reset();
+            Evaluation evaluation = net.evaluate(iTest);
 
             System.out.println(evaluation.stats());
         }

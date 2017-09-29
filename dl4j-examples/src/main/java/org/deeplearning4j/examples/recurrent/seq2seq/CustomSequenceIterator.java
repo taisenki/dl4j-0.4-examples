@@ -8,7 +8,6 @@ import org.nd4j.linalg.factory.Nd4j;
 
 import java.util.*;
 
-
 /**
  * Created by susaneraly on 3/27/16.
  * This is class to generate a multidataset from the AdditionRNN problem
@@ -25,6 +24,7 @@ import java.util.*;
 
 public class CustomSequenceIterator implements MultiDataSetIterator {
 
+    private MultiDataSetPreProcessor preProcessor;
     private Random randnumG;
     private final int seed;
     private final int batchSize;
@@ -137,10 +137,6 @@ public class CustomSequenceIterator implements MultiDataSetIterator {
     @Override
     public void remove() {
         throw new UnsupportedOperationException("Not supported");
-    }
-
-    public void setPreProcessor(MultiDataSetPreProcessor multiDataSetPreProcessor) {
-
     }
 
     @Override
@@ -294,5 +290,8 @@ public class CustomSequenceIterator implements MultiDataSetIterator {
         oneHotMap.put("End", 13);
 
     }
-}
 
+    public void setPreProcessor(MultiDataSetPreProcessor preProcessor) {
+        this.preProcessor = preProcessor;
+    }
+}

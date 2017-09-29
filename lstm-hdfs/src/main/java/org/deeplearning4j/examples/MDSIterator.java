@@ -29,6 +29,7 @@ public class MDSIterator extends BaseDataSetIterator implements MultiDataSetIter
     private final int batchSize;
     private int numSteps = 6;
     private Stack<Path> stack = new Stack<Path>();
+    private MultiDataSetPreProcessor preProcessor;
 
     private StackSequenceRecordReader ssRecordReader;
 
@@ -93,6 +94,10 @@ public class MDSIterator extends BaseDataSetIterator implements MultiDataSetIter
         }
     }
 
+    public void setPreProcessor(MultiDataSetPreProcessor preProcessor) {
+        this.preProcessor = preProcessor;
+    }
+
     private void pushAndClear(Path path, String index) {
         String p = stack.isEmpty() ? "" : stack.peek().toUri().toString();
         if (p.contains(index.split("_")[0])) {
@@ -150,13 +155,9 @@ public class MDSIterator extends BaseDataSetIterator implements MultiDataSetIter
         return true;
     }
 
-    @Override
-    public void setPreProcessor(MultiDataSetPreProcessor preprocessor) {
-
-    }
 
     public MultiDataSetPreProcessor getPreProcessor() {
-        return null;
+        return preProcessor;
     }
 
     @Override
